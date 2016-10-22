@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+#
+# Quick shortcut for setting the tab title
+#
+
+if [ "$1" = "" ] ; then
+  echo "provide tab title to set"
+else
+  echo -ne "\e]1;$1\a"
+fi
