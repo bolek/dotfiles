@@ -1,0 +1,2 @@
+ServerAliveCountMax 15
+ServerAliveInterval 3
