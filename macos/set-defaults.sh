@@ -677,25 +677,4 @@ defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool t
 # Disable signing emails by default
 defaults write ~/Library/Preferences/org.gpgtools.gpgmail SignNewEmailsByDefault -bool false
 
-###############################################################################
-# Kill affected applications                                                  #
-###############################################################################
-for app in "Activity Monitor" \
-  "Address Book" \
-  "Calendar" \
-  "cfprefsd" \
-  "Contacts" \
-  "Dock" \
-  "Finder" \
-  "Google Chrome Canary" \
-  "Google Chrome" \
-  "Mail" \
-  "Messages" \
-  "Photos" \
-  "Safari" \
-  "SystemUIServer" \
-  "Terminal" \
-  "iCal"; do
-  killall "${app}" &> /dev/null
-done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
