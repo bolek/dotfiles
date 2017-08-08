@@ -26,6 +26,7 @@ brew 'wget'
 brew 'youtube-dl'
 
 cask '1password'
+cask 'dash'
 cask 'google-chrome'
 cask 'hipchat'
 cask 'slack'
