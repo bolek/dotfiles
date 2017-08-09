@@ -25,6 +25,7 @@ brew 'unrar'
 brew 'wget'
 
 cask '1password'
+cask 'dropbox'
 cask 'dash'
 cask 'google-chrome'
 cask 'hipchat'
