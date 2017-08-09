@@ -23,7 +23,6 @@ brew 'spark'
 brew 'yarn'
 brew 'unrar'
 brew 'wget'
-brew 'youtube-dl'
 
 cask '1password'
 cask 'dash'
