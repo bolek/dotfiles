@@ -20,7 +20,7 @@ brew 'ruby-build'
 brew 'rbenv'
 brew 'spaceman-diff'
 brew 'spark'
-
+brew 'yarn'
 brew 'unrar'
 brew 'wget'
 brew 'youtube-dl'
