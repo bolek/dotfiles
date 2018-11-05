@@ -1,20 +1,41 @@
 -- Don't display the "helpful" message on startup.
+\setenv PAGER 'pspg -X -b'
+
 \set QUIET 1
 \pset null '¤'
 
-\set PROMPT1 '%[%033[1m%]%M %n@%/%R%[%033[0m%]%# '
-\set PROMPT2 '[more] %R > '
+SELECT version / 10000 || '.' || (version / 100) % 100 || '.' || version % 100 AS pg_version FROM (SELECT current_setting('server_version_num')::int AS version) v \gset
+
+\set PROMPT1 '%m(%:pg_version:) %n@%/ %x➜ '
+\set PROMPT2 '%x➜ '
 
 -- Show how long each query takes to execute
 \timing
 
 -- Use best available output format
-\x auto
+\x off
 \set VERBOSITY verbose
 \set HISTFILE ~/.psql/history- :HOST :DBNAME
 \set HISTCONTROL ignoredups
 \set COMP_KEYWORD_CASE upper
-\unset QUIET
 
 \set ON_ERROR_ROLLBACK interactive
 \setenv EDITOR 'subl -w'
+
+SELECT CASE WHEN current_setting('server_version_num')::int >= 90600 THEN 'pid, usename, datname, application_name, wait_event, wait_event_type, query_start, state, query' ELSE 'pid, usename, datname, application_name, waiting, query_start, state' END AS _activity_columns \gset
+
+\set config 'SELECT name, CASE unit WHEN $$kB$$ THEN pg_size_pretty(setting::bigint * 1024) WHEN $$8kB$$ THEN pg_size_pretty(setting::bigint * 8192) ELSE setting || COALESCE(unit, $$$$) END AS setting, source FROM pg_settings WHERE source <> $$default$$;'
+
+-- :actall -- show all connections
+\set actall 'SELECT :_activity_columns, client_addr FROM pg_stat_activity ORDER BY datname, usename, application_name';
+
+-- :act -- show non-idle connections
+\set act 'SELECT :_activity_columns FROM pg_stat_activity WHERE state <> \'idle\'';
+
+-- :slow -- show slow connections (active for over 30 seconds)
+\set slow 'SELECT :_activity_columns FROM pg_stat_activity WHERE current_timestamp - query_start > interval \'30 seconds\' AND state = \'active\'';
+
+-- :locks -- show all locked queries
+\set locks 'SELECT blocked_locks.pid     AS blocked_pid, blocked_activity.usename  AS blocked_user, blocking_locks.pid     AS blocking_pid, blocking_activity.usename AS blocking_user, blocked_activity.query    AS blocked_statement, blocking_activity.query   AS current_statement_in_blocking_process FROM  pg_catalog.pg_locks         blocked_locks JOIN pg_catalog.pg_stat_activity blocked_activity  ON blocked_activity.pid = blocked_locks.pid JOIN pg_catalog.pg_locks blocking_locks  ON blocking_locks.locktype = blocked_locks.locktype AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid AND blocking_locks.pid != blocked_locks.pid JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid WHERE NOT blocked_locks.GRANTED;'
+
+\set QUIET off
