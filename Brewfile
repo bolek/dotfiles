@@ -1,31 +1,34 @@
 cask_args appdir: '/Applications'
 
-tap 'homebrew/bundle'
-tap 'puma/puma'
+tap "homebrew/cask"
 
 brew 'ack'
+brew 'asdf'
+brew 'autoconf'
+brew 'automake'
+
+# GNU File, Shell, and Text utilities
 brew 'coreutils'
-brew 'go'
+# Colorize logfiles and command output
 brew 'grc'
 brew 'imagemagick'
 brew 'jq'
-brew 'libgit2'
+
+brew 'libtool'
+brew 'libyaml'
 brew 'openssl'
 brew 'openvpn'
-brew 'node'
+brew 'nvm'
+# Library for command-line editing
 brew 'readline'
-brew 'postgresql'
-brew 'puma/puma/puma-dev'
-brew 'ruby-build'
-brew 'rbenv'
-brew 'spaceman-diff'
-brew 'spark'
 brew 'yarn'
-brew 'unrar'
 brew 'wget'
 
+cask 'visual-studio-code'
 cask '1password'
 cask 'dropbox'
-cask 'dash'
 cask 'google-chrome'
 cask 'slack'
+cask 'sourcetree'
+cask 'cyberduck'
+cask 'zoom'
