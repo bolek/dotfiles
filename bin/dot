@@ -6,6 +6,8 @@
 # to make sure you're on the latest and greatest.
 export ZSH=$HOME/.dotfiles
 
+ln -s ~/Library/Mobile\ Documents/com~apple~CloudDocs ~/iCloud
+
 # Set macOS defaults
 $ZSH/macos/set-defaults.sh
 
