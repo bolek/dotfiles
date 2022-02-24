@@ -47,4 +47,4 @@
 	template = /Users/bolek/.stCommitMsg
 	gpgsign = true
 [gpg]
-	program = gpg
+	program = gpg2
