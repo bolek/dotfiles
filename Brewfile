@@ -21,7 +21,6 @@ brew 'openvpn'
 brew 'nvm'
 # Library for command-line editing
 brew 'readline'
-brew 'yarn'
 brew 'wget'
 
 cask 'iterm2'
