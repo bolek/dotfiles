@@ -18,7 +18,6 @@ brew 'libtool'
 brew 'libyaml'
 brew 'openssl'
 brew 'openvpn'
-brew 'nvm'
 # Library for command-line editing
 brew 'readline'
 brew 'wget'
