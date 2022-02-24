@@ -24,6 +24,7 @@ brew 'readline'
 brew 'yarn'
 brew 'wget'
 
+cask 'iterm2'
 cask 'visual-studio-code'
 cask '1password'
 cask 'dropbox'
