@@ -30,6 +30,12 @@ brew 'zlib'
 brew 'curl'
 brew 'ossp-uuid'
 
+# Postgis deps
+brew 'geos'
+brew 'proj'
+brew 'protobuf-c'
+brew 'gdal'
+
 # pure prompt
 brew 'pure'
 
