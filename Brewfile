@@ -6,6 +6,7 @@ brew 'ack'
 brew 'asdf'
 brew 'autoconf'
 brew 'automake'
+brew 'zsh'
 
 # GNU File, Shell, and Text utilities
 brew 'coreutils'
