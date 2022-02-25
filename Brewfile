@@ -17,12 +17,18 @@ brew 'jq'
 
 brew 'libtool'
 brew 'libyaml'
-brew 'openssl'
+brew 'openssl@1.1'
 brew 'openvpn'
 # Library for command-line editing
 brew 'readline'
 brew 'wget'
 
+# Postgres deps
+brew 'gcc'
+brew 'readline'
+brew 'zlib'
+brew 'curl'
+brew 'ossp-uuid'
 cask 'iterm2'
 cask 'visual-studio-code'
 cask '1password'
