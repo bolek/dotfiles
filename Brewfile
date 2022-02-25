@@ -29,6 +29,10 @@ brew 'readline'
 brew 'zlib'
 brew 'curl'
 brew 'ossp-uuid'
+
+# pure prompt
+brew 'pure'
+
 cask 'iterm2'
 cask 'visual-studio-code'
 cask '1password'
