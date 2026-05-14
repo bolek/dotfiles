@@ -1,7 +1,5 @@
 cask_args appdir: '/Applications'
 
-tap "homebrew/cask"
-
 brew 'ack'
 brew 'autoconf'
 brew 'automake'
