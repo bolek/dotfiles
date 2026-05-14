@@ -3,9 +3,9 @@ cask_args appdir: '/Applications'
 tap "homebrew/cask"
 
 brew 'ack'
-brew 'asdf'
 brew 'autoconf'
 brew 'automake'
+brew 'mise'
 brew 'zsh'
 
 # GNU File, Shell, and Text utilities
@@ -22,13 +22,15 @@ brew 'openvpn'
 # Library for command-line editing
 brew 'readline'
 brew 'wget'
+brew 'awscli'
+brew 'ansible'
 
 # Postgres deps
 brew 'gcc'
-brew 'readline'
 brew 'zlib'
 brew 'curl'
 brew 'ossp-uuid'
+brew 'pspg'
 
 # Postgis deps
 brew 'geos'
@@ -40,7 +42,8 @@ brew 'gdal'
 brew 'pure'
 
 cask 'iterm2'
-cask 'visual-studio-code'
+cask 'cursor'
+cask 'zed'
 cask '1password'
 cask 'dropbox'
 cask 'google-chrome'
