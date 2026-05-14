@@ -16,7 +16,7 @@
         ui = true
 [core]
 	excludesfile = ~/.gitignore
-	editor = code -w
+	editor = vim
 [apply]
         whitespace = nowarn
 [mergetool]
@@ -37,14 +37,14 @@
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [user]
 	name = bolek
 	email = bolek@tolemi.com
 	signingkey = 613BCB98444FC24B
 [commit]
-	template = /Users/bolek/.stCommitMsg
+	template = ~/.stCommitMsg
 	gpgsign = true
 [gpg]
 	program = gpg2
