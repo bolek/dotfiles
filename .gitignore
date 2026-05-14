@@ -1,1 +1,5 @@
 git/gitconfig.local.symlink
+.DS_Store
+*.swp
+*.swo
+logfile
