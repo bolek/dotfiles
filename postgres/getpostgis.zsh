@@ -5,7 +5,7 @@ function getpostgis () {
     if [[ ! -a ./configure ]]; then
       ./autogen.sh
     fi
-    eval ./configure `pg_config --configure --withprojdir=/opt/homebrew/Cellar/proj/8.2.1`
+    eval ./configure `pg_config --configure`
     make
     make install
     cd ../..
