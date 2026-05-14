@@ -3,3 +3,4 @@ git/gitconfig.local.symlink
 *.swp
 *.swo
 logfile
+.claude/
