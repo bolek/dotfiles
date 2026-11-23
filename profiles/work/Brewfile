@@ -36,5 +36,6 @@ brew "redis", restart_service: :changed
 brew "elixir-ls"
 
 cask "slack"
+cask "asana"
 cask "zoom"
 cask "openvpn-connect"
