@@ -1,8 +1,6 @@
 # Shared by every machine. Profile extras live in profiles/<profile>/Brewfile;
 # AI tools are installed by claude/install.sh and openai/install.sh.
 
-tap "nikitabobko/tap"
-
 # shell & core utils
 brew "zsh"
 brew "pure"              # prompt
@@ -37,7 +35,7 @@ cask "1password-cli"
 cask "gpg-suite"         # gpg2 for commit signing
 cask "iterm2"
 cask "zed"
+cask "sourcetree"        # git GUI
 cask "zen"
 cask "google-chrome"     # second browser for testing
-cask "aerospace"
 cask "font-symbols-only-nerd-font"

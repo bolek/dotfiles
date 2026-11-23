@@ -3,5 +3,3 @@
 brew "exercism"
 
 cask "spotify"
-cask "dropbox"
-cask "kap"
