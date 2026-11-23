@@ -1,42 +1,61 @@
--- Don't display the "helpful" message on startup.
-\setenv PAGER 'pspg -X -b'
-
+-- ~/.psqlrc. Quiet while loading so these settings don't echo.
 \set QUIET 1
+
+-- Pager: pspg (keep output on screen after exit, black-white theme)
+\setenv PAGER 'pspg -X -b'
+-- \e opens vim (PSQL_EDITOR leaves $EDITOR alone for \! subshells)
+\setenv PSQL_EDITOR 'vim'
+
 \pset null '¤'
+\x auto
 
-SELECT version / 10000 || '.' || (version / 100) % 100 || '.' || version % 100 AS pg_version FROM (SELECT current_setting('server_version_num')::int AS version) v \gset
-
-\set PROMPT1 '%m(%:pg_version:) %n@%/ %x➜ '
-\set PROMPT2 '%x➜ '
-
--- Show how long each query takes to execute
-\timing
-
--- Use best available output format
-\x off
-\set VERBOSITY verbose
-\set HISTFILE ~/.psql/history- :HOST :DBNAME
-\set HISTCONTROL ignoredups
+-- Errors: normal detail; run \errverbose after one for the full report
+\set VERBOSITY default
+\set ON_ERROR_ROLLBACK interactive
 \set COMP_KEYWORD_CASE upper
 
-\set ON_ERROR_ROLLBACK interactive
-\setenv EDITOR 'vim -w'
+-- History per host+database (~/.psql is created by psql/install.sh)
+\set HISTFILE ~/.psql/history- :HOST :DBNAME
+\set HISTSIZE 10000
+\set HISTCONTROL ignoreboth
 
-SELECT CASE WHEN current_setting('server_version_num')::int >= 90600 THEN 'pid, NOW() - query_start AS duration, usename, datname, application_name, wait_event, wait_event_type, query_start, state, query' ELSE 'pid, usename, datname, application_name, waiting, query_start, state' END AS _activity_columns \gset
+-- Prompt: host(version) user@db, red PROD tag when host or db looks like prod
+SELECT (:'HOST' || ' ' || current_database()) ~* 'prod' AS is_prod \gset
+\if :is_prod
+  \set PROMPT1 '%[%033[1;37;41m%] PROD %[%033[0m%] %m(%:SERVER_VERSION_NAME:) %n@%/ %x➜ '
+\else
+  \set PROMPT1 '%m(%:SERVER_VERSION_NAME:) %n@%/ %x➜ '
+\endif
+\set PROMPT2 '%x➜ '
 
+-- Shortcuts: run with :name
+\set _activity_columns 'pid, now() - query_start AS duration, usename, datname, application_name, wait_event_type, wait_event, query_start, state, query'
+
+-- :config -- settings changed from their defaults
 \set config 'SELECT name, CASE unit WHEN $$kB$$ THEN pg_size_pretty(setting::bigint * 1024) WHEN $$8kB$$ THEN pg_size_pretty(setting::bigint * 8192) ELSE setting || COALESCE(unit, $$$$) END AS setting, source FROM pg_settings WHERE source <> $$default$$;'
 
--- :actall -- show all connections
-\set actall 'SELECT :_activity_columns, client_addr FROM pg_stat_activity ORDER BY datname, usename, application_name';
+-- :actall -- all connections
+\set actall 'SELECT :_activity_columns, client_addr FROM pg_stat_activity ORDER BY datname, usename, application_name;'
 
--- :act -- show non-idle connections
-\set act 'SELECT :_activity_columns FROM pg_stat_activity WHERE state <> \'idle\'';
-\set jobs 'SELECT j.id AS job_id, j.status, u.username, j.started_at, NOW() - j.started_at AS duration, ps.definition, j.params FROM swarm.jobs j INNER JOIN swarm.pipeline_steps ps ON ps.id = j.pipeline_step_id LEFT JOIN platform.os_user u ON u.id = j.triggered_by_user_id WHERE j.status = \'STARTED\' ORDER BY 5 desc';
+-- :act -- non-idle connections
+\set act 'SELECT :_activity_columns FROM pg_stat_activity WHERE state <> $$idle$$;'
 
--- :slow -- show slow connections (active for over 30 seconds)
-\set slow 'SELECT :_activity_columns FROM pg_stat_activity WHERE current_timestamp - query_start > interval \'30 seconds\' AND state = \'active\' ORDER BY 2 desc';
+-- :slow -- queries active for over 30 seconds
+\set slow 'SELECT :_activity_columns FROM pg_stat_activity WHERE state = $$active$$ AND now() - query_start > interval $$30 seconds$$ ORDER BY 2 DESC;'
 
--- :locks -- show all locked queries
+-- :locks -- blocked queries and what blocks them
 \set locks 'SELECT blocked_locks.pid     AS blocked_pid, blocked_activity.usename  AS blocked_user, blocking_locks.pid     AS blocking_pid, blocking_activity.usename AS blocking_user, blocked_activity.query    AS blocked_statement, blocking_activity.query   AS current_statement_in_blocking_process FROM  pg_catalog.pg_locks         blocked_locks JOIN pg_catalog.pg_stat_activity blocked_activity  ON blocked_activity.pid = blocked_locks.pid JOIN pg_catalog.pg_locks blocking_locks  ON blocking_locks.locktype = blocked_locks.locktype AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid AND blocking_locks.pid != blocked_locks.pid JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid WHERE NOT blocked_locks.GRANTED;'
 
+-- :sizes -- largest tables (total size including indexes and TOAST)
+\set sizes 'SELECT n.nspname AS schema, c.relname AS table, pg_size_pretty(pg_total_relation_size(c.oid)) AS total, pg_size_pretty(pg_relation_size(c.oid)) AS heap, c.reltuples::bigint AS est_rows FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relkind IN ($$r$$, $$m$$, $$p$$) AND n.nspname NOT IN ($$pg_catalog$$, $$information_schema$$) ORDER BY pg_total_relation_size(c.oid) DESC LIMIT 25;'
+
+-- Private overlay (work-specific shortcuts that don't belong in a public repo)
+\set _private_psqlrc `f=${DOTFILES_PRIVATE:-$HOME/.dotfiles-private}/psql/psqlrc; [ -f "$f" ] && echo "$f" || echo ""`
+SELECT :'_private_psqlrc' <> '' AS _has_private \gset
+\if :_has_private
+  \i :_private_psqlrc
+\endif
+
+-- Show query times (last, so setup queries above don't print timings)
+\timing on
 \set QUIET off
