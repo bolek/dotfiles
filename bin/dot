@@ -3,11 +3,9 @@
 # dot
 #
 # `dot` handles installation, updates, things like that. Run it periodically
-# to make sure you're on the latest and greatest.
+# to make sure you're on the latest and greatest. macOS defaults are applied
+# once by script/bootstrap (or by hand with `set-defaults`), not here.
 export ZSH=$HOME/.dotfiles
-
-# Set macOS defaults
-$ZSH/macos/set-defaults.sh
 
 # Install homebrew
 $ZSH/homebrew/install.sh 2>&1
