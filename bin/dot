@@ -18,3 +18,16 @@ brew update
 # Install software
 echo "› $ZSH/script/install"
 $ZSH/script/install
+
+# Tidy up old versions and downloads
+echo "› brew cleanup"
+brew cleanup
+
+# Report anything installed that no Brewfile lists (dry run; nothing removed)
+# shellcheck disable=SC1090
+[ -f ~/.localrc ] && . ~/.localrc
+all=$(mktemp)
+cat "$ZSH/Brewfile" "$ZSH/profiles/${DOTFILES_PROFILE:-none}/Brewfile" 2>/dev/null > "$all"
+echo "› not in any Brewfile (remove with: brew bundle cleanup --force --file=<list>)"
+brew bundle cleanup --file="$all" || true
+rm -f "$all"

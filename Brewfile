@@ -2,13 +2,11 @@
 # AI tools are installed by claude/install.sh and openai/install.sh.
 
 # shell & core utils
-brew "zsh"
 brew "pure"              # prompt
 brew "coreutils"         # gls etc. (system/aliases.zsh)
 brew "grc"               # colorized output (system/grc.zsh)
 brew "mise"              # language/runtime versions
 brew "wget"
-brew "curl"
 brew "jq"
 brew "fd"
 brew "fzf"
