@@ -1,0 +1,39 @@
+# Work machine extras (on top of ../../Brewfile)
+
+# cloud & ops
+brew "awscli"
+brew "aws-elasticbeanstalk"
+brew "ansible"
+brew "cloudflared"
+brew "openvpn"
+brew "sslscan"
+brew "lftp"
+brew "rclone"
+
+# containers
+brew "podman"
+brew "podman-compose"
+brew "docker"
+brew "docker-compose"
+
+# postgres (built via pgenv) + postgis
+brew "pkgconf"
+brew "openssl@3"
+brew "icu4c"
+brew "readline"
+brew "zlib"
+brew "ossp-uuid"
+brew "geos"
+brew "proj"
+brew "gdal"
+brew "protobuf-c"
+brew "pspg"
+brew "tippecanoe"
+brew "redis", restart_service: :changed
+
+# elixir (runtimes via mise)
+brew "elixir-ls"
+
+cask "slack"
+cask "zoom"
+cask "openvpn-connect"

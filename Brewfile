@@ -1,52 +1,41 @@
-cask_args appdir: '/Applications'
+# Shared by every machine. Profile extras live in profiles/<profile>/Brewfile;
+# AI tools are installed by claude/install.sh and openai/install.sh.
 
-brew 'ack'
-brew 'autoconf'
-brew 'automake'
-brew 'mise'
-brew 'zsh'
+# shell & core utils
+brew "zsh"
+brew "pure"              # prompt
+brew "coreutils"         # gls etc. (system/aliases.zsh)
+brew "grc"               # colorized output (system/grc.zsh)
+brew "mise"              # language/runtime versions
+brew "wget"
+brew "curl"
+brew "jq"
+brew "fd"
+brew "fzf"
+brew "ripgrep"
+brew "zoxide"
+brew "yazi"              # file manager (zed/yazi_zed.zsh)
+brew "sevenzip"
 
-# GNU File, Shell, and Text utilities
-brew 'coreutils'
-# Colorize logfiles and command output
-brew 'grc'
-brew 'imagemagick'
-brew 'jq'
+# git & dev
+brew "gh"
+brew "git-quick-stats"
+brew "shellcheck"
+brew "actionlint"
+brew "biome"
 
-brew 'libtool'
-brew 'libyaml'
-brew 'openssl@1.1'
-brew 'openvpn'
-# Library for command-line editing
-brew 'readline'
-brew 'wget'
-brew 'awscli'
-brew 'ansible'
+# media / docs
+brew "imagemagick"
+brew "ffmpeg"
+brew "pandoc"
 
-# Postgres deps
-brew 'gcc'
-brew 'zlib'
-brew 'curl'
-brew 'ossp-uuid'
-brew 'pspg'
-
-# Postgis deps
-brew 'geos'
-brew 'proj'
-brew 'protobuf-c'
-brew 'gdal'
-
-# pure prompt
-brew 'pure'
-
-cask 'iterm2'
-cask 'cursor'
-cask 'zed'
-cask '1password'
-cask 'dropbox'
-cask 'google-chrome'
-cask 'slack'
-cask 'sourcetree'
-cask 'cyberduck'
-cask 'zoom'
-cask 'gpg-suite'
+# apps
+cask "1password"
+cask "1password-cli"
+cask "gpg-suite"         # gpg2 for commit signing
+cask "iterm2"
+cask "zed"
+cask "sourcetree"        # git GUI
+cask "zen"
+cask "google-chrome"     # second browser for testing
+cask "font-symbols-only-nerd-font"

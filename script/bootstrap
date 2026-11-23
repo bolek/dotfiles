@@ -49,6 +49,22 @@ setup_gitconfig () {
   fi
 }
 
+setup_profile () {
+  if ! grep -qs '^export DOTFILES_PROFILE=' ~/.localrc
+  then
+    info 'setup profile'
+    user ' - Is this a [w]ork or [p]ersonal machine?'
+    read -n 1 choice
+    echo ''
+    case "$choice" in
+      w|W ) profile=work;;
+      * )   profile=personal;;
+    esac
+    echo "export DOTFILES_PROFILE=$profile" >> ~/.localrc
+    success "profile: $profile (saved to ~/.localrc)"
+  fi
+}
+
 
 link_file () {
   local src=$1 dst=$2
@@ -140,6 +156,7 @@ install_dotfiles () {
 # dump factory defaults since we will be playing with these
 defaults read > ~/default-factory-settings
 
+setup_profile
 setup_gitconfig
 install_dotfiles
 
