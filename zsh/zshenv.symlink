@@ -1,0 +1,6 @@
+# mise activate runs from .zshrc, which non-interactive shells never read, so
+# without shims here they miss every pinned tool. activate still wins when it runs.
+
+typeset -U path PATH
+
+export PATH="$HOME/.local/share/mise/shims:$PATH"

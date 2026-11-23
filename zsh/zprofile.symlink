@@ -1,0 +1,3 @@
+# Sourced after /etc/zprofile, whose path_helper demotes what .zshenv prepended.
+
+export PATH="$HOME/.local/share/mise/shims:$PATH"
