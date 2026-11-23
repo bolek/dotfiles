@@ -1,0 +1,3 @@
+# Seed for ~/.codex/config.toml (copied only if it doesn't exist yet).
+personality = "pragmatic"
+model_reasoning_effort = "xhigh"
