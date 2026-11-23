@@ -1,0 +1,7 @@
+# Personal machine extras (on top of ../../Brewfile)
+
+brew "exercism"
+
+cask "spotify"
+cask "dropbox"
+cask "kap"

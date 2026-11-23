@@ -1,14 +1,29 @@
 #!/usr/bin/env bash
 #
-# Run all dotfiles installers.
+# Run all dotfiles installers: shared Brewfile, the active profile's Brewfile,
+# then every topic's install.sh.
 
 set -e
 
-cd "$(dirname $0)"/..
+cd "$(dirname "$0")"/..
 
-# Run Homebrew through the Brewfile
-echo "› brew bundle"
-brew bundle
+# shellcheck disable=SC1090
+[ -f ~/.localrc ] && source ~/.localrc
 
-# find the installers and run them iteratively
-find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+echo "› brew bundle (shared)"
+brew bundle --file=Brewfile
+
+if [ -n "$DOTFILES_PROFILE" ] && [ -f "profiles/$DOTFILES_PROFILE/Brewfile" ]
+then
+  echo "› brew bundle ($DOTFILES_PROFILE)"
+  brew bundle --file="profiles/$DOTFILES_PROFILE/Brewfile"
+fi
+
+# shared installers, then the active profile's
+find . -name install.sh -not -path './profiles/*' -not -path './script/*' |
+  while read -r installer; do sh -c "$installer"; done
+if [ -n "$DOTFILES_PROFILE" ] && [ -d "profiles/$DOTFILES_PROFILE" ]
+then
+  find "profiles/$DOTFILES_PROFILE" -name install.sh |
+    while read -r installer; do sh -c "$installer"; done
+fi
