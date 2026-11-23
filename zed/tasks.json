@@ -1,0 +1,10 @@
+// Zed tasks. See https://zed.dev/docs/tasks
+[
+  {
+    "label": "Yazi",
+    "command": "yazi_zed $ZED_FILE",
+    "hide": "always",
+    "use_new_terminal": true,
+    "show_summary": false
+  }
+]
